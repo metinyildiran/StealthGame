@@ -7,6 +7,14 @@
 #include "Perception/PawnSensingComponent.h"
 #include "FPSAIGuard.generated.h"
 
+UENUM(BlueprintType)
+enum class EAIState : uint8
+{
+	Idle,
+	Suspicious,
+	Alerted
+};
+
 UCLASS()
 class FPSGAME_API AFPSAIGuard : public ACharacter
 {
@@ -15,7 +23,7 @@ class FPSGAME_API AFPSAIGuard : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AFPSAIGuard();
-	
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -24,14 +32,50 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UPawnSensingComponent* PawnSensingComp;
 
+	UPROPERTY(EditInstanceOnly, Category="Debug")
+	bool bDrawDebug;
+
 	UFUNCTION()
 	void OnPawnSeen(APawn* SeenPawn);
 
 	UFUNCTION()
 	void OnNoiseHeard(APawn* NoiseInstigator, const FVector& Location, float Volume);
 
-public:	
+	FRotator OriginalRotation;
+
+	UFUNCTION()
+	void ResetOrientation();
+
+	FTimerHandle TimerHandle_ResetOrientation;
+
+	EAIState GuardState;
+
+	void SetGuardState(EAIState NewState);
+
+	UFUNCTION(BlueprintImplementableEvent, Category="AI")
+	void OnStateChanged(EAIState NewState);
+
+	void DebugDrawSphere(const FVector Location, FColor Color);
+
+	// CHALLENGE CODE
+
+	UPROPERTY(EditInstanceOnly, Category="AI")
+	bool bPatrol;
+
+	UPROPERTY(EditInstanceOnly, Category="AI", meta = (EditCondition="bPatrol"))
+	AActor* FirstPatrolPoint;
+
+	UPROPERTY(EditInstanceOnly, Category="AI", meta = (EditCondition="bPatrol"))
+	AActor* SecondPatrolPoint;
+
+	UPROPERTY()
+	AActor* CurrentPatrolPoint;
+
+	void MoveToNextPatrolPoint();
+
+	void StopPatrolling();
+
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
 };
