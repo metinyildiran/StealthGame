@@ -30,6 +30,8 @@ void AFPSGameMode::CompleteMission(APawn* InstigatorPawn, bool bMissionSuccess)
 			// Change viewtarget if any valid actor found
 			if (ReturnedActors.Num() > 0) 
 			{
+				InstigatorPawn->SetActorHiddenInGame(true);
+				
 				AActor* NewViewTarget = ReturnedActors[0];
 			
 				APlayerController* PC = Cast<APlayerController>(InstigatorPawn->GetController());
@@ -43,8 +45,6 @@ void AFPSGameMode::CompleteMission(APawn* InstigatorPawn, bool bMissionSuccess)
 			UE_LOG(LogTemp, Warning, TEXT("SpectatingViewpointClass is nullptr. Please update GameMode class with valid subclass. CAnnot change spectating view target."));
 		}
 	}
-
-	InstigatorPawn->SetActorHiddenInGame(true);
 
 	OnMissionCompleted(InstigatorPawn, bMissionSuccess);
 }
