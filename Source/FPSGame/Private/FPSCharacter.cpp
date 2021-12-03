@@ -61,7 +61,6 @@ void AFPSCharacter::Tick(float DeltaSeconds)
 	}
 }
 
-
 void AFPSCharacter::Fire()
 {
 	ServerFire();

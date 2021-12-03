@@ -20,7 +20,6 @@ class AFPSCharacter : public ACharacter
 	GENERATED_BODY()
 
 protected:
-
 	/** Pawn mesh: 1st person view  */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Mesh")
 	USkeletalMeshComponent* Mesh1PComponent;
@@ -55,10 +54,10 @@ public:
 	bool bIsCarryingObjective;
 
 protected:
-	
 	/** Fires a projectile. */
 	void Fire();
 
+	/** WithValidation is required if you are using Server keyword */
 	UFUNCTION(Server, Reliable, WithValidation)
 	void ServerFire();
 
@@ -79,4 +78,3 @@ public:
 
 	virtual void Tick(float DeltaSeconds) override;
 };
-
